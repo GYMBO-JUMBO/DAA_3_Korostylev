@@ -10,8 +10,40 @@ public final class Algorithms {
     static Map<String, Object> dsu(Map<String, Object> input) {
         int n = Input.vertexCount(input);
         int[][] operations = Input.operations(input);
-
+        int[] parents = new int[n];
+        int[] size = new int[n];
+        for(int i = 0; i < n; i++){
+            parents[i] = i;
+            size[i] = 1;
+        }
+        int components = n;
+        int largest = 1;
         throw new UnsupportedOperationException("TODO dsu");
+    }
+    static int find(int[] parents, int x){
+        if(parents[x] == x){
+            return x;
+        }
+        parents[x] = find(parents, parents[x]);
+        return parents[x];
+    }
+    static boolean union(int[] parents, int[] size, int a, int b){
+        int coreA = find(parents, a);
+        int coreB = find(parents, b);
+        if(coreA == coreB){
+            return false;
+        }
+        int sizeA = size[coreA];
+        int sizeB = size[coreB];
+        if(sizeA >= sizeB){
+            parents[coreB] = coreA;
+            size[coreA] = size[coreA] + size[coreB];
+        }
+        else{
+            parents[coreA] = coreB;
+            size[coreB] = size[coreB] + size[coreA];
+        }
+        return true;
     }
 
     /** Separate Kruskal implementation; return cost, edge_ids, components. */
